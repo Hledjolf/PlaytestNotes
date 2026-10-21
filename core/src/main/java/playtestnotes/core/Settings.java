@@ -27,6 +27,7 @@ public record Settings(
     int maxNoteLength,
     double cooldownSeconds,
     boolean includeModList,
+    boolean modListIncludeBuiltIn,
     String echoToChat,
     String whoCanNote,
     String commandName,
@@ -43,7 +44,7 @@ public record Settings(
     public static final List<String> DEFAULT_TAGS = List.of("bug", "idea", "balance", "art", "perf", "ui");
 
     public static Settings defaults() {
-        return new Settings(true, "notes", "{date}_{world}.md", DEFAULT_LINE, "HH:mm:ss", false, 0, 280, 0.5, true,
+        return new Settings(true, "notes", "{date}_{world}.md", DEFAULT_LINE, "HH:mm:ss", false, 0, 280, 0.5, true, false,
             "self", "everyone", "note", DEFAULT_TAGS, 0);
     }
 
@@ -112,6 +113,7 @@ public record Settings(
             r.integer("MaxNoteLength", d.maxNoteLength, 20, 2000, ""),
             r.number("CooldownSeconds", d.cooldownSeconds, 0, 10),
             r.bool("IncludeModList", d.includeModList),
+            r.bool("ModListIncludeBuiltIn", d.modListIncludeBuiltIn),
             r.option("EchoToChat", d.echoToChat, ECHO),
             r.option("WhoCanNote", d.whoCanNote, WHO),
             command,
@@ -142,6 +144,7 @@ public record Settings(
             case "MaxNoteLength" -> maxNoteLength;
             case "CooldownSeconds" -> cooldownSeconds;
             case "IncludeModList" -> includeModList;
+            case "ModListIncludeBuiltIn" -> modListIncludeBuiltIn;
             case "EchoToChat" -> echoToChat;
             case "WhoCanNote" -> whoCanNote;
             case "CommandName" -> commandName;

@@ -136,6 +136,7 @@ public final class NoteService {
         v.put("text", p.text());
         v.put("tags", p.tagText());
         String line = Templates.expand(s.lineTemplate(), v).stripTrailing();
+        String chatLine = ChatText.line(s.lineTemplate(), v);
         Path file;
         try {
             file = writer.append(s, t, world, who.name(), line);
@@ -152,9 +153,9 @@ public final class NoteService {
         saveState();
         return switch (s.echoToChat()) {
             case "none" -> new Reply(List.of(), null, "none");
-            case "operators" -> new Reply(List.of("Noted. " + line), who.name() + " noted: " + line, "operators");
-            case "everyone" -> new Reply(List.of("Noted. " + line), who.name() + " noted: " + line, "everyone");
-            default -> new Reply(List.of("Noted. " + line), null, "none");
+            case "operators" -> new Reply(List.of("Noted. " + chatLine), who.name() + " noted: " + chatLine, "operators");
+            case "everyone" -> new Reply(List.of("Noted. " + chatLine), who.name() + " noted: " + chatLine, "everyone");
+            default -> new Reply(List.of("Noted. " + chatLine), null, "none");
         };
     }
 
@@ -198,7 +199,7 @@ public final class NoteService {
         try {
             List<String> lines = writer.tail(f, n);
             if (lines.isEmpty()) return Reply.of("No notes yet today.");
-            List<String> out = new ArrayList<>(lines);
+            List<String> out = new ArrayList<>(ChatText.plainAll(lines));
             return new Reply(out, null, "none");
         } catch (IOException e) {
             return Reply.of("The notes file couldn't be read: " + e.getMessage());
@@ -240,7 +241,11 @@ public final class NoteService {
         }
         settings = next;
         List<String> parts = new ArrayList<>();
-        for (var e : changed.entrySet()) parts.add(e.getKey() + " " + shown(old.get(e.getKey())) + " → " + shown(e.getValue()));
+        for (var e : changed.entrySet()) {
+            Object before = old.get(e.getKey());
+            if (sameValue(before, e.getValue())) continue;
+            parts.add(e.getKey() + " " + shown(before) + " -> " + shown(e.getValue()));
+        }
         if (!parts.isEmpty()) {
             try {
                 writer.appendToCurrent("- " + Templates.time(clock.instant(), next.timeFormat(), next.useUtc()) + " *settings changed: " + String.join(", ", parts) + " (by MSM)*");
@@ -289,6 +294,12 @@ public final class NoteService {
         return abs.startsWith(base) ? base.relativize(abs).toString().replace('\\', '/') : abs.toString();
     }
 
+    /** Whether a settings-window value equals the running one (numbers compare by value, whatever their type). */
+    static boolean sameValue(Object a, Object b) {
+        if (a instanceof Number x && b instanceof Number y) return x.doubleValue() == y.doubleValue();
+        return java.util.Objects.equals(a, b);
+    }
+
     private static String shown(Object v) {
         if (v == null) return "(unset)";
         if (v instanceof Integer i) return Integer.toString(i);
@@ -297,6 +308,6 @@ public final class NoteService {
 
     private static Settings withFolder(Settings s, String folder) {
         return new Settings(s.enabled(), folder, s.fileNameTemplate(), s.lineTemplate(), s.timeFormat(), s.useUtc(), s.coordinatePrecision(),
-            s.maxNoteLength(), s.cooldownSeconds(), s.includeModList(), s.echoToChat(), s.whoCanNote(), s.commandName(), s.tags(), s.hookDelayMillis());
+            s.maxNoteLength(), s.cooldownSeconds(), s.includeModList(), s.modListIncludeBuiltIn(), s.echoToChat(), s.whoCanNote(), s.commandName(), s.tags(), s.hookDelayMillis());
     }
 }
