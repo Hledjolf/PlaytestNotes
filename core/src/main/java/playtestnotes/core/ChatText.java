@@ -40,7 +40,8 @@ public final class ChatText {
      * {@code snake_case} survive.
      */
     public static String plain(String markdownLine) {
-        String s = markdownLine.strip();
+        // Files written before 1.0.0 used "→", which the game font lacks.
+        String s = markdownLine.strip().replace("→", "->");
         if (s.isEmpty() || RULE.matcher(s).matches()) return null;
         if (s.startsWith("|")) return tableRow(s);
         var h = HEADING.matcher(s);
