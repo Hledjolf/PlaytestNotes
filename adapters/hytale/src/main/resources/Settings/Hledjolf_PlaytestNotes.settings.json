@@ -1,0 +1,29 @@
+{
+  "$schema": "https://raw.githubusercontent.com/Hledjolf/ModSettingsManager/main/schema/settings-sidecar.schema.json",
+  "format": 1,
+  "plugin": "Hledjolf:PlaytestNotes",
+  "config": "notes/settings.json",
+  "sections": [
+    { "id": "general", "label": "General" },
+    { "id": "files", "label": "Files", "description": "Where notes go and how each line looks." },
+    { "id": "limits", "label": "Limits" },
+    { "id": "access", "label": "Who can write notes" }
+  ],
+  "keys": {
+    "Enabled": { "label": "Notes enabled", "section": "general", "type": "bool", "default": true, "restart": false },
+    "CommandName": { "label": "Command name", "description": "The note command, without the slash. The list command is this plus \"s\". Takes effect after a restart.", "section": "general", "type": "string", "default": "note", "restart": true },
+    "EchoToChat": { "label": "Echo notes to chat", "section": "general", "options": ["none", "self", "operators", "everyone"], "default": "self", "restart": false },
+    "OutputFolder": { "label": "Output folder", "description": "Absolute, or relative to this mod's data folder. Windows paths like D:\\Playtests work. If the folder can't be written, the change is refused and notes keep going to the old folder.", "section": "files", "type": "string", "default": "notes", "restart": false },
+    "FileNameTemplate": { "label": "File name", "description": "Tokens: {date} {world} {server} {player}. Must end in .md or .txt.", "section": "files", "type": "string", "default": "{date}_{world}.md", "restart": false },
+    "LineTemplate": { "label": "Line format", "description": "Tokens: {time} {player} {world} {x} {y} {z} {text} {tags}. Markdown is fine.", "section": "files", "type": "string", "default": "- {time} **{player}** @ {world} ({x}, {y}, {z}): {text} {tags}", "restart": false },
+    "TimeFormat": { "label": "Time format", "section": "files", "options": ["HH:mm", "HH:mm:ss", "h:mm a", "h:mm:ss a", "ISO-8601", "epoch-ms"], "default": "HH:mm:ss", "restart": false },
+    "UseUtc": { "label": "Use UTC times", "section": "files", "type": "bool", "default": false, "restart": false },
+    "CoordinatePrecision": { "label": "Coordinate decimals", "section": "files", "type": "int", "min": 0, "max": 3, "step": 1, "default": 0, "restart": false },
+    "IncludeModList": { "label": "Plugin list in each file", "description": "Start each notes file with a table of every loaded plugin and its version.", "section": "files", "type": "bool", "default": true, "restart": false },
+    "MaxNoteLength": { "label": "Longest note (characters)", "section": "limits", "type": "int", "min": 20, "max": 2000, "step": 20, "default": 280, "restart": false },
+    "CooldownSeconds": { "label": "Cooldown between notes (seconds)", "section": "limits", "type": "float", "min": 0, "max": 10, "default": 0.5, "restart": false },
+    "WhoCanNote": { "label": "Who can write notes", "description": "permission: operators, plus players with playtestnotes.write.", "section": "access", "options": ["everyone", "permission", "operators"], "default": "everyone", "restart": false },
+    "Tags": { "label": "Known tags", "description": "Words after # that count as tags. Edit the file to change this list.", "section": "general" },
+    "Debug.HookDelayMillis": { "hidden": true }
+  }
+}

@@ -1,0 +1,13 @@
+{
+  "Group": "Hledjolf",
+  "Name": "PlaytestNotes",
+  "Version": "${version}",
+  "Description": "Write timestamped playtest notes in game with /note. Each note records the player, world, position and #tags in a Markdown file that starts with a list of every loaded plugin.",
+  "Authors": [
+    { "Name": "Hledjolf" }
+  ],
+  "Website": "https://github.com/Hledjolf/PlaytestNotes",
+  "Main": "playtestnotes.PlaytestNotesPlugin",
+  "ServerVersion": "*",
+  "Dependencies": {}
+}
