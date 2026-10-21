@@ -65,12 +65,22 @@ public final class NoteWriter {
         return current;
     }
 
-    /** The last {@code n} non-blank lines of a file (an empty list if it doesn't exist). */
+    /**
+     * The last {@code n} note lines of a file (an empty list if it doesn't exist). Header-block lines (the title,
+     * the server line, the plugin table with its divider and rows, and {@code ---} separators) and blank lines
+     * are skipped first, then the last {@code n} of what is left are taken.
+     */
     public synchronized List<String> tail(Path file, int n) throws IOException {
         if (file == null || !Files.exists(file)) return List.of();
         List<String> all = Files.readAllLines(file, StandardCharsets.UTF_8), out = new ArrayList<>();
-        for (int i = all.size() - 1; i >= 0 && out.size() < n; i--) if (!all.get(i).isBlank()) out.add(0, all.get(i));
+        for (int i = all.size() - 1; i >= 0 && out.size() < n; i--) if (!isHeaderLine(all.get(i))) out.add(0, all.get(i));
         return out;
+    }
+
+    static boolean isHeaderLine(String line) {
+        if (line.isBlank()) return true;
+        String t = line.stripLeading();
+        return t.startsWith("# ") || t.startsWith("Server ") || t.startsWith("|") || t.equals("---");
     }
 
     /**
