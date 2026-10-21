@@ -62,11 +62,11 @@ val checkJarContents = tasks.register("checkJarContents") {
     }
 }
 
-// checkNoProjectMarks: no public file (tracked, shipped in the jar or zip, or on the mod pages) may name the
-// author's other, unreleased project. The words are split here so this file doesn't match itself.
+// checkNoProjectMarks: no public file (tracked, shipped in the jar or zip, or on the mod pages) may contain
+// blocked terms. The words are split here so this file doesn't match itself.
 val checkNoProjectMarks = tasks.register("checkNoProjectMarks") {
     group = "verification"
-    description = "Fails if a tracked, shipped or page file mentions the author's unreleased project."
+    description = "Fails if a tracked, shipped or page file contains a blocked term."
     dependsOn(hytaleJar)
     val marks = listOf("arch" + "mage", "spell" + "bound", "master" + " of " + "magic")
     val files = fileTree(projectDir) {
