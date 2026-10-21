@@ -82,7 +82,8 @@ public final class HytaleCommands {
                 World w = ref.getStore().getExternalData().getWorld();
                 UUID id = context.sender().getUuid();
                 String user = context.sender().getUsername();
-                boolean perm = context.sender().hasPermission(PERMISSION);
+                // The singleplayer owner counts as having the permission too, as with operator-only actions.
+                boolean perm = context.sender().hasPermission(PERMISSION) || HytaleHost.isOperator(id);
                 who = CompletableFuture.supplyAsync(() -> {
                     Store<EntityStore> store = ref.getStore();
                     TransformComponent t = ref.isValid() ? store.getComponent(ref, TransformComponent.getComponentType()) : null;
