@@ -5,6 +5,8 @@ import com.hypixel.hytale.common.util.java.ManifestUtil;
 import com.hypixel.hytale.logger.HytaleLogger;
 import com.hypixel.hytale.server.core.HytaleServer;
 import com.hypixel.hytale.server.core.Message;
+import com.hypixel.hytale.server.core.Constants;
+import com.hypixel.hytale.server.core.modules.singleplayer.SingleplayerModule;
 import com.hypixel.hytale.server.core.permissions.PermissionsModule;
 import com.hypixel.hytale.server.core.plugin.PluginBase;
 import com.hypixel.hytale.server.core.plugin.PluginManager;
@@ -65,10 +67,13 @@ public final class HytaleHost implements Host {
         return w == null ? "world" : w.getName();
     }
 
-    /** Operator: in the {@code /op} group, or holding every permission. */
+    /** Operator: in the {@code /op} group, holding every permission, or the owner of a singleplayer world. */
     static boolean isOperator(UUID player) {
+        if (player == null) return false;
+        // Vanilla's admin commands let the singleplayer owner through even though they aren't in the /op group.
+        if (Constants.SINGLEPLAYER && SingleplayerModule.isOwner(player)) return true;
         PermissionsModule perms = PermissionsModule.get();
-        if (perms == null || player == null) return false;
+        if (perms == null) return false;
         Set<String> groups = perms.getGroupsForUser(player);
         return groups != null && groups.contains(OP_GROUP) || perms.hasPermission(player, PermissionsModule.ROOT);
     }
