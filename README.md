@@ -2,7 +2,7 @@
 
 Write down what you find while you play, without leaving the game. `/note <text>` adds a timestamped line to a Markdown file on the server. Each line records who wrote it, the world, the position and any `#tags`. Each file starts with a table of every loaded plugin and its version, so you always know which build you were testing.
 
-Hytale server 0.7.2. MIT licensed. No dependencies.
+Hytale server 0.7.3. MIT licensed. No dependencies.
 
 ## Install
 
@@ -32,7 +32,7 @@ The notes are in `mods/Hledjolf_PlaytestNotes/notes/`, one file per day and worl
 ```markdown
 # Playtest notes: default, 2026-10-21
 
-Server 0.7.2 · started 14:02:11 · notes by Alex
+Server 0.7.3 · started 14:02:11 · notes by Alex
 
 | Plugin | Version |
 | --- | --- |
