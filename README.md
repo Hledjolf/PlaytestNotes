@@ -1,6 +1,6 @@
 # Playtest Notes
 
-Write down what you find while you play, without leaving the game. `/note <text>` adds a timestamped line to a Markdown file on the server. Each line records who wrote it, the world, the position and any `#tags`. Each file starts with a table of every loaded plugin and its version, so you always know which build you were testing.
+Write down what you find while you play, without leaving the game. `/note <text>` adds a timestamped line to a Markdown file on the server. Each line records who wrote it, the world, the position and any `#tags`. Each file starts with a table of the loaded plugins and their versions (the built-in Hytale ones are counted on one line), so you always know which build you were testing.
 
 Hytale server 0.7.3. MIT licensed. No dependencies.
 
@@ -27,6 +27,16 @@ The notes are in `mods/Hledjolf_PlaytestNotes/notes/`, one file per day and worl
 - A second note within `CooldownSeconds` is refused. That guards against pressing Enter twice.
 - Hytale's command parser reads every command line first, so two things in typed text change: a backslash starts an escape (type `\\` for one `\`), and square brackets get spaces around them (`[a]` arrives as `[ a ]`).
 
+## In chat
+
+The file is Markdown; chat shows plain text. `/note` answers with the line minus its formatting, and `/notes` strips it the same way (a `## heading` shows as `[heading]`, and the plugin table is skipped):
+
+```
+Noted. 14:05:32 Alex @ default (412, 71, -88): the bridge texture flickers at dusk #art
+```
+
+Only the formatting from the line format is removed. What you typed (`2*3`, `snake_case`) stays as written.
+
 ## A notes file
 
 ```markdown
@@ -38,11 +48,12 @@ Server 0.7.3 · started 14:02:11 · notes by Alex
 | --- | --- |
 | Hledjolf:PlaytestNotes | 1.0.0 |
 | ModSettingsManager:ModSettingsManager | 1.0.0 |
+| + 212 built-in Hytale plugins | 0.7.3 |
 
 - 14:05:32 **Alex** @ default (412, 71, -88): the bridge texture flickers at dusk #art
 ## Boss fight
 - 14:09:03 **Alex** @ default (530, 64, -12): boss heals too fast #balance
-- 14:09:40 *settings changed: MaxNoteLength 280 → 500 (by MSM)*
+- 14:09:40 *settings changed: MaxNoteLength 280 -> 500 (by MSM)*
 ```
 
 - A file starts with the first note of a server session, and a new one starts when the file name changes (a new date, or a note from another world). If the file already exists from an earlier session, the new session is added below a `---` line.
@@ -65,6 +76,7 @@ The file is in the mod's data folder. The first start writes only the most-used 
 | `MaxNoteLength` | `280` | The longest note, in characters (20 to 2000). |
 | `CooldownSeconds` | `0.5` | The shortest time between two notes from one player (0 to 10). |
 | `IncludeModList` | `true` | Start each file with the plugin table. |
+| `ModListIncludeBuiltIn` | `false` | List every built-in `Hytale:*` plugin in the table. Off: one line gives their count. |
 | `EchoToChat` | `"self"` | Who sees "Noted." and the line: `none`, `self`, `operators` or `everyone`. |
 | `WhoCanNote` | `"everyone"` | `everyone`; `permission` (operators, plus players with `playtestnotes.write`); or `operators`. The console can always write. |
 | `CommandName` | `"note"` | The note command's name, without the slash. The list command is this plus `s`. Takes effect after a restart. |

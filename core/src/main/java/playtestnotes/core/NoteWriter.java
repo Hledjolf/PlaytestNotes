@@ -98,7 +98,15 @@ public final class NoteWriter {
         }
         if (s.includeModList()) {
             b.append("| Plugin | Version |\n| --- | --- |\n");
-            for (Host.PluginInfo p : host.plugins()) b.append("| ").append(cell(p.id())).append(" | ").append(cell(p.version())).append(" |\n");
+            int builtIn = 0;
+            for (Host.PluginInfo p : host.plugins()) {
+                if (!s.modListIncludeBuiltIn() && p.id() != null && p.id().startsWith("Hytale:")) {
+                    builtIn++;
+                    continue;
+                }
+                b.append("| ").append(cell(p.id())).append(" | ").append(cell(p.version())).append(" |\n");
+            }
+            if (builtIn > 0) b.append("| + ").append(builtIn).append(" built-in Hytale plugins | ").append(cell(host.serverVersion())).append(" |\n");
             b.append("\n");
         }
         write(file, b.toString());
