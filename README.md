@@ -69,7 +69,7 @@ The file is in the mod's data folder. The first start writes only the most-used 
 | `Enabled` | `true` | When off, `/note` answers "Playtest Notes is turned off." |
 | `OutputFolder` | `"notes"` | Where the files go: absolute, or relative to the data folder. On Windows, write backslashes doubled in JSON: `"D:\\Playtests"`. |
 | `FileNameTemplate` | `"{date}_{world}.md"` | Tokens `{date}`, `{world}`, `{server}`, `{player}` (the session's first noter). Must end in `.md` or `.txt`. |
-| `LineTemplate` | `"- {time} **{player}** @ {world} ({x}, {y}, {z}): {text} {tags}"` | Tokens `{time}`, `{player}`, `{world}`, `{x}`, `{y}`, `{z}`, `{text}`, `{tags}`. Anything else is written as is. |
+| `LineTemplate` | (long, see below) | Tokens `{time}`, `{player}`, `{world}`, `{x}`, `{y}`, `{z}`, `{text}`, `{tags}`. Anything else is written as is. |
 | `TimeFormat` | `"HH:mm:ss"` | One of `HH:mm`, `HH:mm:ss`, `h:mm a`, `h:mm:ss a`, `ISO-8601`, `epoch-ms`. |
 | `UseUtc` | `false` | Dates and times in UTC instead of the server's time zone. |
 | `CoordinatePrecision` | `0` | Decimal places for positions, 0 to 3. Coordinates are rounded down, so 0 gives the block. |
@@ -82,6 +82,8 @@ The file is in the mod's data folder. The first start writes only the most-used 
 | `CommandName` | `"note"` | The note command's name, without the slash. The list command is this plus `s`. Takes effect after a restart. |
 | `Tags` | `["bug", "idea", "balance", "art", "perf", "ui"]` | The words after `#` that count as tags. |
 | `Debug.HookDelayMillis` | `0` | For testing only: makes the live-apply hook wait this long (0 to 5000). Set it inside a `"Debug": { }` object. |
+
+Default `LineTemplate`: `"- {time} **{player}** @ {world} ({x}, {y}, {z}): {text} {tags}"`
 
 A value of the wrong type or out of range is replaced by its default, with a line in the server log saying so. The mod never rewrites `notes/settings.json` after it first creates it, so your edits are never overwritten.
 
